@@ -4,5 +4,6 @@
 
 (with-connection ("amqp://")
   (with-channel ()
-    (publish (exchange.default) "Hello world!" :routing-key "hello")
-    (format t " [x] Sent 'Hello World!'~%")))
+    (let* ((q (queue.declare :name "cl-hello-queue" :auto-delete t)))
+      (publish (exchange.default) "Hello world!" :routing-key (queue-name q))
+      (format t " [x] Sent 'Hello World!'~%"))))
